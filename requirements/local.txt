@@ -1,9 +1,7 @@
 -r ./base.txt
 
-Werkzeug==0.14.1  
 ipdb==0.12.2  
-Sphinx==2.1.2  
-psycopg2==2.8.3 --no-binary psycopg2
+
 
 # Testing
 mypy==0.720

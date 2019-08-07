@@ -3,7 +3,6 @@
 -r ./base.txt
 
 gunicorn==19.9.0
-psycopg2==2.8.3 --no-binary psycopg2
 Collectfast==0.6.2
 
 # Django
