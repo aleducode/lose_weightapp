@@ -1,0 +1,25 @@
+-r ./base.txt
+
+Werkzeug==0.14.1  
+ipdb==0.12.2  
+Sphinx==2.1.2  
+psycopg2==2.8.3 --no-binary psycopg2
+
+# Testing
+mypy==0.720
+pytest==5.0.1
+pytest-sugar==0.9.2
+
+# Code quality
+flake8==3.7.8
+coverage==4.5.4
+black==19.3b0
+pylint-django==2.0.11
+
+# Django
+factory-boy==2.12.0
+
+django-debug-toolbar==2.0
+django-extensions==2.2.1
+django-coverage-plugin==1.6.0
+pytest-django==3.5.1
