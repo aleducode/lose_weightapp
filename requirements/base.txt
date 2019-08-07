@@ -9,9 +9,8 @@ redis==3.3.5
 django==2.2.4
 django-environ==0.4.5
 django-model-utils==3.2.0
-django-allauth==0.39.1
-django-crispy-forms==1.7.2
 django-redis==4.10.0
+django-filter==2.0.0
 
 # Django REST Framework
 djangorestframework==3.10.2
