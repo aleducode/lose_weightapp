@@ -26,7 +26,11 @@ class User(WeightModel, AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
 
-    
+    class Meta:
+        """Meta class."""
+
+        verbose_name = 'Usuario'
+        verbose_name_plural = 'Usuarios'
 
     def __str__(self):
         """Return username."""
