@@ -24,9 +24,9 @@ class CustomUserAdmin(UserAdmin):
 class PofileAdmin(admin.ModelAdmin):
     """Profile model admin."""
 
-    list_display = ('user', 'specialty', 'registration_type', 'registration_number')
+    list_display = ('user', 'speciality', 'registration_type', 'registration_number')
     search_fields = ('user__username', 'user__email', 'user___first_name', 'user__last_name')
-    list_filter = ('specialty',)
+    list_filter = ('speciality',)
 
 
 admin.site.register(User, CustomUserAdmin)

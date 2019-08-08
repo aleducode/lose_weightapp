@@ -53,7 +53,7 @@ class Profile(WeightModel):
 
     user = models.OneToOneField('users.User', on_delete=models.CASCADE)
 
-    specialty = models.ForeignKey(
+    speciality = models.ForeignKey(
         Speciality,
         on_delete=models.CASCADE,
         help_text='Speciality of doctor.'
