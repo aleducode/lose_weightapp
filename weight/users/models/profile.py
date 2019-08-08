@@ -15,8 +15,33 @@ class RegistrationType(models.Model):
         max_length=250,
     )
 
+    class Meta:
+        """Meta class."""
+
+        verbose_name = 'Tipo de Matrícula'
+        verbose_name_plural = 'Tipo de Matrículas'
+
     def __str__(self):
-        """return registration type name"""
+        """Return registration type name."""
+        return str(self.name)
+
+
+class Speciality(models.Model):
+    """Doctor's Speciality type."""
+
+    name = models.CharField(
+        'Speciality Name',
+        max_length=250,
+    )
+
+    class Meta:
+        """Meta class."""
+
+        verbose_name = 'Especialidad'
+        verbose_name_plural = 'Especialidades'
+
+    def __str__(self):
+        """Return speciality type name."""
         return str(self.name)
 
 
@@ -28,11 +53,10 @@ class Profile(WeightModel):
 
     user = models.OneToOneField('users.User', on_delete=models.CASCADE)
 
-    specialty = models.CharField(
-        'Speciality',
-        max_length=500,
-        blank=True,
-        null=True
+    specialty = models.ForeignKey(
+        Speciality,
+        on_delete=models.CASCADE,
+        help_text='Speciality of doctor.'
     )
     registration_type = models.ForeignKey(
         RegistrationType,
@@ -44,8 +68,14 @@ class Profile(WeightModel):
         max_length=20,
     )
 
+    class Meta:
+        """Meta class."""
+
+        verbose_name = 'Perfil'
+        verbose_name_plural = 'Perfiles'
+
     def __str__(self):
-        """return users name"""
+        """Return users name."""
         return str(self.user)
 
 
