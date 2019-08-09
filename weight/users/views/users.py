@@ -15,7 +15,8 @@ from weight.users.permissions import IsAccountOwner
 # Serializers
 from weight.users.serializers import (
     UserModelSerializer,
-    UserLoginSerializer
+    UserLoginSerializer,
+    UserSignUpSerializer
     )
 
 # Models
@@ -38,7 +39,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
         """Assign permission based on action."""
         if self.action in ['signup', 'login']:
             permissions = [AllowAny]
-        elif self.action == ['retrieve', 'update', 'partial_update']:
+        elif self.action in ['retrieve', 'update', 'partial_update']:
             permissions = [IsAuthenticated, IsAccountOwner]
         else:
             permissions = [IsAuthenticated]
@@ -54,4 +55,13 @@ class UserViewSet(mixins.RetrieveModelMixin,
             'user': UserModelSerializer(user).data,
             'access_token': token
         }
+        return Response(data, status=status.HTTP_201_CREATED)
+
+    @action(detail=False, methods=['post'])
+    def signup(self, request):
+        """User|Profile signup."""
+        serializer = UserSignUpSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        data = UserModelSerializer(user).data
         return Response(data, status=status.HTTP_201_CREATED)
