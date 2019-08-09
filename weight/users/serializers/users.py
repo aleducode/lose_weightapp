@@ -130,7 +130,7 @@ class UserSignUpSerializer(serializers.Serializer):
         profile_data = {}
         for field in Profile._meta.local_fields:
             if field.name in data:
-                profile_data[field.name] = data.pop(field.named)
+                profile_data[field.name] = data.pop(field.name)
 
         user = User.objects.create_user(**data)
         Profile.objects.create(
