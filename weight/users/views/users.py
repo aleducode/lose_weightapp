@@ -26,7 +26,6 @@ from weight.patients.models import Patient
 
 
 class UserViewSet(mixins.RetrieveModelMixin,
-                  mixins.UpdateModelMixin,
                   viewsets.GenericViewSet):
     """User view set.
 
