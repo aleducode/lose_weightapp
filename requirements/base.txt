@@ -17,6 +17,7 @@ django-filter==2.0.0
 djangorestframework==3.10.2
 coreapi==2.3.3
 drf-yasg
+packaging
 
 # Static files
 whitenoise==4.1.2
