@@ -18,9 +18,11 @@ from weight.users.serializers import (
     UserLoginSerializer,
     UserSignUpSerializer
     )
+from weight.patients.serializers import PatientModelSerializer
 
 # Models
 from weight.users.models import User
+from weight.patients.models import Patient
 
 
 class UserViewSet(mixins.RetrieveModelMixin,
@@ -41,6 +43,8 @@ class UserViewSet(mixins.RetrieveModelMixin,
             permissions = [AllowAny]
         elif self.action in ['retrieve']:
             permissions = [IsAuthenticated, IsAccountOwner]
+        elif self.action in ['patients']:
+            permissions = [IsAuthenticated]
         return [p() for p in permissions]
 
     @action(detail=False, methods=['post'])
@@ -63,3 +67,11 @@ class UserViewSet(mixins.RetrieveModelMixin,
         user = serializer.save()
         data = UserModelSerializer(user).data
         return Response(data, status=status.HTTP_201_CREATED)
+    
+    @action(detail=False, methods=['get'])
+    def patients(self, request):
+        """Retrieve all doctor's patients."""
+        doctor = request.user
+        queryset = Patient.objects.filter(doctor=doctor)
+        serializer = PatientModelSerializer(queryset, many=True)
+        return Response(serializer.data)
