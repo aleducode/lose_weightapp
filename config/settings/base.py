@@ -43,6 +43,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
+    'drf_yasg',
 ]
 
 LOCAL_APPS = [
@@ -171,4 +172,9 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10
+}
+
+SWAGGER_SETTINGS = {
+   'USE_SESSION_AUTH': False,
+   
 }
