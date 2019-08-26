@@ -33,7 +33,6 @@ class UserViewSet(mixins.RetrieveModelMixin,
     """
 
     queryset = User.objects.all()
-    serializer_class = UserModelSerializer
     lookup_field = 'username'
 
     def get_permissions(self):
@@ -46,10 +45,21 @@ class UserViewSet(mixins.RetrieveModelMixin,
             permissions = [IsAuthenticated]
         return [p() for p in permissions]
 
+    def get_serializer_class(self):
+        """Return serializer based on action."""
+        if self.action == 'login':
+            return UserLoginSerializer
+        if self.action == 'signup':
+            return UserSignUpSerializer
+        if self.action == 'patients':
+            return PatientModelSerializer
+        return UserModelSerializer
+
     @action(detail=False, methods=['post'])
     def login(self, request):
         """User login."""
-        serializer = UserLoginSerializer(data=request.data)
+        serializer_class = self.get_serializer_class()
+        serializer = serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user, token = serializer.save()
         data = {
@@ -61,7 +71,8 @@ class UserViewSet(mixins.RetrieveModelMixin,
     @action(detail=False, methods=['post'])
     def signup(self, request):
         """User|Profile signup."""
-        serializer = UserSignUpSerializer(data=request.data)
+        serializer_class = self.get_serializer_class()
+        serializer = serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         data = UserModelSerializer(user).data
@@ -70,7 +81,8 @@ class UserViewSet(mixins.RetrieveModelMixin,
     @action(detail=False, methods=['get'])
     def patients(self, request):
         """Retrieve all doctor's patients."""
+        serializer_class = self.get_serializer_class()
         doctor = request.user
         queryset = Patient.objects.filter(doctor=doctor)
-        serializer = PatientModelSerializer(queryset, many=True)
+        serializer = serializer_class(queryset, many=True)
         return Response(serializer.data)

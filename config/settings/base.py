@@ -175,6 +175,5 @@ REST_FRAMEWORK = {
 }
 
 SWAGGER_SETTINGS = {
-   'USE_SESSION_AUTH': False,
-   
+    'USE_SESSION_AUTH': False,
 }
