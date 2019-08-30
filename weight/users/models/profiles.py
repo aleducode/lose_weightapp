@@ -14,6 +14,9 @@ class RegistrationType(models.Model):
         'Name Registration type',
         max_length=250,
     )
+    slug_name = models.SlugField(
+        max_length=40
+    )
 
     class Meta:
         """Meta class."""
@@ -32,6 +35,9 @@ class Speciality(models.Model):
     name = models.CharField(
         'Speciality Name',
         max_length=250,
+    )
+    slug_name = models.SlugField(
+        max_length=40
     )
 
     class Meta:
