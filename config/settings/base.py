@@ -49,6 +49,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     'weight.users.apps.UsersAppConfig',
     'weight.patients.apps.PatientsAppConfig',
+    'weight.visits.apps.VisitsAppConfig',
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 

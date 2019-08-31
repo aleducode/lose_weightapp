@@ -1,8 +1,7 @@
 """Patients views."""
 
 # Django Rest Framework
-from rest_framework import status, viewsets, mixins
-from rest_framework.decorators import action
+from rest_framework import viewsets, mixins, status
 from rest_framework.response import Response
 
 # Permissions
@@ -24,7 +23,7 @@ class PatientViewSet(mixins.RetrieveModelMixin,
     """Patient view set."""
 
     queryset = Patient.objects.all()
-    lookup_field = 'document'
+    lookup_field = 'username'
 
     def get_serializer_class(self):
         """Return serializer based on action."""
@@ -38,3 +37,11 @@ class PatientViewSet(mixins.RetrieveModelMixin,
         if self.action in ['retrieve']:
             permissions.append(IsDoctorPatient)
         return [p() for p in permissions]
+
+    def create(self, request, *args, **kwargs):
+        """Custom create method."""
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        patient = serializer.save()
+        response_data = PatientModelSerializer(patient).data
+        return Response(response_data, status=status.HTTP_201_CREATED)

@@ -5,6 +5,7 @@ from django.db import models
 
 # Utils
 from weight.utils.models import WeightModel
+import datetime
 
 GENDER_CHOICES = [
         ('M', 'M'),
@@ -19,8 +20,8 @@ class Patient(WeightModel):
         'Nombre Paciente',
         max_length=140
         )
-    document = models.SlugField(
-        'Documento Paciente',
+    username = models.SlugField(
+        'Nombre de Usuario Paciente',
         unique=True,
         max_length=10
         )
@@ -45,6 +46,11 @@ class Patient(WeightModel):
         verbose_name = 'Paciente'
         verbose_name_plural = 'Pacientes'
 
+    def age(self):
+        """Return age for patient."""
+        age = round(int((datetime.date.today() - self.birthdate).days)/365, 0)
+        return age
+
     def __str__(self):
         """Return name."""
         return self.name
@@ -52,3 +58,4 @@ class Patient(WeightModel):
     def get_short_name(self):
         """Return name."""
         return self.name
+        
