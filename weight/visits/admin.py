@@ -5,7 +5,9 @@ from django.contrib import admin
 
 # Models
 from weight.visits.models import (
-    Visit
+    Visit,
+    FirstVisitComplementInformation
 )
 
 admin.site.register(Visit)
+admin.site.register(FirstVisitComplementInformation)

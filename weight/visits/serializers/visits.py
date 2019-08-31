@@ -44,13 +44,21 @@ class CreateVisitModelModelSerializer(serializers.ModelSerializer):
 
     def validate_type_visit(self, data):
         """Validate unique first visit."""
+        patient = self.context['patient'].pk
         if data == 'First':
             first_visit_already_exists = Visit.objects.filter(
-                patient=self.context['patient'].pk,
+                patient=patient,
                 type_visit='First'
             )
             if first_visit_already_exists:
                 raise serializers.ValidationError('First visit already exist for this user.')
+        else:
+            first_visit = Visit.objects.filter(
+                patient=patient,
+                type_visit='First'
+            )
+            if not first_visit:
+                raise serializers.ValidationError('To create follow-Up visit, needs first visit creation.')
         return data
 
     def validate(self, data):
@@ -82,7 +90,7 @@ class CreateVisitModelModelSerializer(serializers.ModelSerializer):
             if patient.age() < 18:
                 result = 'NALTREXONA - BUPROPION no ha sido testeado en menores de 18 años.'
         else:
-            firt_visit = Visit.objects.get(
+            firrt_visit = Visit.objects.get(
                 patient=patient.pk,
                 type_visit='First'
             )
@@ -90,7 +98,7 @@ class CreateVisitModelModelSerializer(serializers.ModelSerializer):
                 patient=patient.pk,
                 type_visit='Follow-Up'
             )
-            treatment_weaks = (timezone.now() - firt_visit.created).days/7
+            treatment_weaks = (timezone.now() - first_visit.created).days/7
             if treatment_weaks >= 12:
                 if follow_up_visits:
                     weights_evolution = []

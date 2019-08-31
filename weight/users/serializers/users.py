@@ -137,5 +137,6 @@ class UserSignUpSerializer(serializers.Serializer):
             user=user,
             **profile_data
         )
-        return user
+        token, created = Token.objects.get_or_create(user=user)
+        return user, token.key
     
