@@ -16,14 +16,19 @@ GENDER_CHOICES = [
 class Patient(WeightModel):
     """Patients model."""
 
-    name = models.CharField(
+    first_name = models.CharField(
         'Nombre Paciente',
+        max_length=140
+        )
+
+    last_name = models.CharField(
+        'Apellido Paciente',
         max_length=140
         )
     username = models.SlugField(
         'Nombre de Usuario Paciente',
         unique=True,
-        max_length=10
+        max_length=15
         )
     doctor = models.ForeignKey(
         'users.User',

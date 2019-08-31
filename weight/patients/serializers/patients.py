@@ -26,14 +26,15 @@ class PatientModelSerializer(serializers.ModelSerializer):
 
         model = Patient
         fields = (
-            'name',
+            'first_name',
+            'last_name',
             'username',
             'gender',
             'birthdate'
         )
 
 
-def random_with_N_digits(n):
+def random_with_n_digits(n):
     """Create random number of n digits."""
     range_start = 10**(n-1)
     range_end = (10**n)-1
@@ -54,10 +55,11 @@ class CreatePatientModelSerializer(serializers.ModelSerializer):
 
     def create(self, data):
         """Create custom username."""
-        data['username'] = 'user_{}{}{}'.format(
-            data['name'][0:3],
+        data['username'] = 'user_{}{}{}{}'.format(
+            data['first_name'][0:2],
+            data['last_name'][0:2],
             data['gender'][0].lower(),
-            random_with_N_digits(1)
+            random_with_n_digits(1)
             )
         patient = Patient.objects.create(**data)
         return patient

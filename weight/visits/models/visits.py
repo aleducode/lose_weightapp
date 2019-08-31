@@ -52,12 +52,12 @@ class Visit(WeightModel):
         on_delete=models.CASCADE,
     )
 
-    weight = models.CharField(
+    weight = models.FloatField(
         'Current patient weight',
         max_length=5
     )
 
-    height = models.CharField(
+    height = models.FloatField(
         'Current patient height',
         max_length=6,
         blank=True,
@@ -72,6 +72,8 @@ class Visit(WeightModel):
 
     risk_factor = models.BooleanField(
         'Risk factor',
+        null=False,
+        blank=False,
         help_text='Risk factor item'
     )
 
