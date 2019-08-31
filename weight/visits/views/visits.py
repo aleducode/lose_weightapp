@@ -19,9 +19,9 @@ from weight.visits.serializers import (
     CreateVisitModelModelSerializer)
 
 
-class PatientViewSet(mixins.ListModelMixin,
-                     mixins.CreateModelMixin,
-                     viewsets.GenericViewSet):
+class VisitViewSet(mixins.ListModelMixin,
+                   mixins.CreateModelMixin,
+                   viewsets.GenericViewSet):
     """Visit view set."""
 
     def dispatch(self, request, *args, **kwargs):
@@ -29,6 +29,12 @@ class PatientViewSet(mixins.ListModelMixin,
         self.username = kwargs['username']
         self.patient = get_object_or_404(Patient, username=self.username)
         return super().dispatch(request, *args, **kwargs)
+
+    def get_serializer_class(self):
+        """Return serializer based on action."""
+        if self.action == 'create':
+            return CreateVisitModelModelSerializer
+        return VisitModelSerializer
 
     def get_permissions(self):
         """Assign permission based on action."""
@@ -40,12 +46,6 @@ class PatientViewSet(mixins.ListModelMixin,
         return Visit.objects.filter(
             patient=self.patient
         )
-
-    def get_serializer_class(self):
-        """Return serializer based on action."""
-        if self.action == 'create':
-            return CreateVisitModelModelSerializer
-        return VisitModelSerializer
 
     def get_serializer_context(self):
         """Add patient to a serializer context."""

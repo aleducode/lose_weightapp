@@ -12,27 +12,6 @@ VISIT_TYPE_CHOICES = [
 ]
 
 
-# class VisitTerms(models.Model):
-#     """Visit terms Model.
-
-#     Store all items or questions to be used by doctor
-#     in all visits.
-#     """
-
-#     title = models.CharField('Term title', max_length=140)
-#     slug_name = models.SlugField(unique=True, max_length=100)
-
-#     first_visit = models.BooleanField(
-#         'Used first visit',
-#         default=True,
-#         help_text='Term is required for first visit.'
-#     )
-#     follow_up_visit = models.BooleanField(
-#         'Used follow-up visit',
-#         default=True,
-#         help_text='Term is required for follow-up visit.'
-#     )
-
 class Visit(WeightModel):
     """Visits model.
 

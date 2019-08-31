@@ -12,7 +12,7 @@ from .views import visits as visit_views
 router = DefaultRouter()
 router.register(
     r'patients/(?P<username>[a-zA-Z0-9_-]+)/visits',
-    visit_views.PatientViewSet,
+    visit_views.VisitViewSet,
     basename='visit'
 )
 urlpatterns = [
