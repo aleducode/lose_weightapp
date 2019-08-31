@@ -58,9 +58,9 @@ class Patient(WeightModel):
 
     def __str__(self):
         """Return name."""
-        return self.name
+        return self.username
 
     def get_short_name(self):
         """Return name."""
-        return self.name
+        return self.username
         

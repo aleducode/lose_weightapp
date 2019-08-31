@@ -21,6 +21,11 @@ INPUT_FORMATS = ['%d/%m/%Y', '%Y-%m-%d', '%Y/%m/%d']
 class PatientModelSerializer(serializers.ModelSerializer):
     """Patient model serializer."""
 
+    age = serializers.SerializerMethodField()
+
+    def age(self, patient):
+        return patient.age()
+
     class Meta:
         """Meta serializer."""
 
@@ -30,7 +35,8 @@ class PatientModelSerializer(serializers.ModelSerializer):
             'last_name',
             'username',
             'gender',
-            'birthdate'
+            'birthdate',
+            'age'
         )
 
 
@@ -60,6 +66,6 @@ class CreatePatientModelSerializer(serializers.ModelSerializer):
             data['last_name'][0:2],
             data['gender'][0].lower(),
             random_with_n_digits(1)
-            )
+        )
         patient = Patient.objects.create(**data)
         return patient

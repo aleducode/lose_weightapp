@@ -61,4 +61,3 @@ class PatientViewSet(mixins.ListModelMixin,
         response_data = VisitModelSerializer(visit).data
         response_data['result'] = result
         return Response(response_data, status=status.HTTP_201_CREATED)
-
