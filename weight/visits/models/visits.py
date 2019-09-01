@@ -10,14 +10,14 @@ from weight.utils.models import (
     FUNCION_RENAL_CHOICES)
 
 VISIT_TYPE_CHOICES = [
-    ('First', 'First'),
-    ('Follow-Up', 'Follow-Up'),
+    ('first', 'First'),
+    ('follow-up', 'Follow-Up'),
 ]
 
 INSUFICIENCIA_CHOICES = [
-    ('No', 'No'),
-    ('Leve', 'Leve'),
-    ('Moderada', 'Moderada a grave'),
+    ('no', 'No'),
+    ('leve', 'Leve'),
+    ('moderada', 'Moderada a grave'),
 ]
 
 

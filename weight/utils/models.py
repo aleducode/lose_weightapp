@@ -10,10 +10,11 @@ ACTIVIDAD_FISICA_CHOICES = [
     ('tres-mas', '3 o mas veces por semana'),
 ]
 FUNCION_RENAL_CHOICES = [
-    ('Leve', ' Disfunción Leve'),
-    ('Moderada', 'Disfunción Moderada'),
-    ('Severa', 'Disfunción Severa'),
-    ('IRC Terminal', 'IRC Terminal'),
+    ('leve', ' Disfunción Leve'),
+    ('moderada', 'Disfunción Moderada'),
+    ('normal', 'Normal'),
+    ('severa', 'Disfunción Severa'),
+    ('irc-terminal', 'IRC Terminal'),
 ]
 
 

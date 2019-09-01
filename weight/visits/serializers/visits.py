@@ -53,17 +53,17 @@ class CreateVisitModelModelSerializer(serializers.ModelSerializer):
     def validate_type_visit(self, data):
         """Validate unique first visit."""
         patient = self.context['patient'].pk
-        if data == 'First':
+        if data == 'first':
             first_visit_already_exists = Visit.objects.filter(
                 patient=patient,
-                type_visit='First'
+                type_visit='first'
             )
             if first_visit_already_exists:
-                raise serializers.ValidationError('First visit already exist for this user.')
+                raise serializers.ValidationError('first visit already exist for this user.')
         else:
             first_visit = Visit.objects.filter(
                 patient=patient,
-                type_visit='First'
+                type_visit='first'
             )
             if not first_visit:
                 raise serializers.ValidationError('To create follow-Up visit, needs first visit creation.')
@@ -71,7 +71,7 @@ class CreateVisitModelModelSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         """Valiate height range."""
-        if data['type_visit'] == 'First':
+        if data['type_visit'] == 'first':
             if 'height' not in data:
                 raise serializers.ValidationError('height field is required')
         return data
@@ -87,7 +87,7 @@ class CreateVisitModelModelSerializer(serializers.ModelSerializer):
         result = ''
         concept = ''
         patient = self.context['patient']
-        if data['type_visit'] == 'First':
+        if data['type_visit'] == 'first':
             imc = self.imc_calcle(self.data['height'], self.data['weight'])
 
             if imc < 27:
@@ -104,7 +104,7 @@ class CreateVisitModelModelSerializer(serializers.ModelSerializer):
         else:
             first_visit = Visit.objects.get(
                 patient=patient.pk,
-                type_visit='First'
+                type_visit='first'
             )
             treatment_weaks = (timezone.now() - first_visit.created).days/7
             if treatment_weaks >= 12:
@@ -136,17 +136,17 @@ class FirstVisitComplementSerializer(serializers.ModelSerializer):
         patient = self.context['patient']
         first_visit = Visit.objects.filter(
             patient=patient,
-            type_visit='First'
+            type_visit='first'
         )
         if not first_visit:
-            raise serializers.ValidationError('First visit is required to create complement info.')
+            raise serializers.ValidationError('first visit is required to create complement info.')
         elif first_visit.get().concept in ['NO INDICADO', 'SUSPENDER']:
             raise serializers.ValidationError('User concept is NO INDICADO.')
         first_complement_visit = FirstVisitComplementInformation.objects.filter(
             visit=first_visit.get().pk
         )
         if first_complement_visit:
-            raise serializers.ValidationError('First complement visit already exist.')
+            raise serializers.ValidationError('first complement visit already exist.')
 
         return data
 
@@ -182,7 +182,7 @@ class FirstVisitComplementSerializer(serializers.ModelSerializer):
 
         first_visit = Visit.objects.get(
             patient=patient,
-            type_visit='First')
+            type_visit='first')
         data['visit'] = first_visit
         FirstVisitComplementInformation.objects.create(**data)
         first_visit.result = result
@@ -221,18 +221,18 @@ class FollowUpVisitComplementSerializer(serializers.ModelSerializer):
         patient = self.context['patient']
         first_visit = Visit.objects.filter(
             patient=patient,
-            type_visit='First'
+            type_visit='first'
         )
         if not first_visit:
             raise serializers.ValidationError(
-                'First visit is required to create complement info.'
+                'first visit is required to create complement info.'
             )
         elif first_visit.get().concept in ['NO INDICADO', 'SUSPENDER']:
             raise serializers.ValidationError('User concept is NO INDICADO.')
 
         follow_up = Visit.objects.filter(
             patient=patient,
-            type_visit='Follow-Up'
+            type_visit='follow-up'
         )
         if not follow_up:
             raise serializers.ValidationError('Follow Up visit is required to create complement data.')
