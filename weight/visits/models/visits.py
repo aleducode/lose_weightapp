@@ -4,11 +4,20 @@
 from django.db import models
 
 # Utilities
-from weight.utils.models import WeightModel, VisitItems
+from weight.utils.models import (
+    WeightModel,
+    VisitItems,
+    FUNCION_RENAL_CHOICES)
 
 VISIT_TYPE_CHOICES = [
     ('First', 'First'),
     ('Follow-Up', 'Follow-Up'),
+]
+
+INSUFICIENCIA_CHOICES = [
+    ('No', 'No'),
+    ('Leve', 'Leve'),
+    ('Moderada', 'Moderada a grave'),
 ]
 
 
@@ -55,6 +64,17 @@ class Visit(WeightModel):
         blank=False,
         help_text='Risk factor item'
     )
+    concept = models.CharField(
+        'Concepto final visita',
+        null=True,
+        blank=True,
+        max_length=130
+    )
+    result = models.TextField(
+        'Resultado de visita',
+        null=True,
+        blank=True
+    )
 
     class Meta:
         """Meta class."""
@@ -64,10 +84,10 @@ class Visit(WeightModel):
 
     def __str__(self):
         """Return visit info."""
-        return 'patient:{} visited Doctor: {} for: {}'.format(
-            self.patient,
+        return 'Patient: {} visited Doctor: {}. for: {}'.format(
+            self.patient.first_name,
             self.doctor,
-            self.type_visit
+            self.type_visit,
         )
 
 
@@ -79,49 +99,125 @@ class FirstVisitComplementInformation(WeightModel, VisitItems):
         on_delete=models.CASCADE
     )
 
+    funcion_renal = models.CharField(
+        'Funcion Renal',
+        max_length=50,
+        choices=FUNCION_RENAL_CHOICES,
+    )
+
+    alergia_naltrexona = models.BooleanField(
+        default=False,
+        help_text='item for visit'
+    )
+
+    insuficiencia_hepatica = models.CharField(
+        'Insuficiencia hepatica',
+        max_length=10,
+        choices=INSUFICIENCIA_CHOICES,
+    )
 
 
+    class Meta:
+        """Meta class."""
 
-# class VisitInformation(models.Model):
-#     """Visit informations.
+        verbose_name = 'Complemento Primera Visita'
+        verbose_name_plural = 'Complementos para Primeras Visitas'
 
-#     Criteries that doctor collect about patient.
-#     """
+    def __str__(self):
+        """Return visit info."""
+        return str(self.visit)
 
-#     slugname = models.SlugField(
-#         'Slugname de Criterio',
-#         unique=True,
-#         max_length=40
-#     )
 
-#     title = models.CharField(
-#         'Titulo de criterio',
-#         max_length=500
-#     )
+class FollowUpVisitComplementInformation(WeightModel, VisitItems):
+    """"FollowUp Visit Complement information."""
 
-#     is_active_first_visit = models.BooleanField(
-#         'Es Activo para primera visita',
-#         help_text='Active item for first visit.',
-#         default=True
-#     )
+    visit = models.OneToOneField(
+        'Visit',
+        on_delete=models.CASCADE
+    )
+    hepatitis_aguda = models.BooleanField(
+        default=False,
+        help_text='item for visit'
+    )
 
-#     is_active_follow_up_visit = models.BooleanField(
-#         'Es Activo para visita de seguimiento',
-#         help_text='Active item for follow-up visit.',
-#         default=True
-#     )
+    hipertension_arterial = models.BooleanField(
+        default=False,
+        help_text='item for visit'
+    )
+    disfuncion_renal = models.CharField(
+        'Disfuncion Renal',
+        max_length=50,
+        choices=FUNCION_RENAL_CHOICES,
+    )
 
-#     class Meta:
-#         """Meta class."""
+    nauseas = models.BooleanField(
+        default=False,
+        help_text='item for visit'
+    )
 
-#         verbose_name = 'Informacion de Visita'
-#         verbose_name_plural = 'Informacion de Visitas'
+    constipacion = models.BooleanField(
+        default=False,
+        help_text='item for visit'
+    )
 
-#     def __str__(self):
-#         """Return visit info."""
-#         return '@slugname:{} - Title: {}'.format(
-#             self.slugname,
-#             self.title,
-#         )
+    cefalea = models.BooleanField(
+        default=False,
+        help_text='item for visit'
+    )
 
+    mareos = models.BooleanField(
+        default=False,
+        help_text='item for visit'
+    )
+
+    insomnio = models.BooleanField(
+        default=False,
+        help_text='item for visit'
+    )
+
+    boca_seca = models.BooleanField(
+        default=False,
+        help_text='item for visit'
+    )
+
+    diarrea = models.BooleanField(
+        default=False,
+        help_text='item for visit'
+    )
+
+    vomitos = models.BooleanField(
+        default=False,
+        help_text='item for visit'
+    )
+
+    dolor_abdominal = models.BooleanField(
+        default=False,
+        help_text='item for visit'
+    )
+
+    otros_eventos = models.BooleanField(
+        default=False,
+        help_text='item for visit'
+    )
+
+    incio_tratamiento_actual = models.BooleanField(
+        default=False,
+        help_text='item for visit'
+    )
+
+    suspendio = models.BooleanField(
+        default=False,
+        help_text='item for visit'
+    )
+
+
+    class Meta:
+        """Meta class."""
+
+        verbose_name = 'Complemento Visita Seguimiento'
+        verbose_name_plural = 'Complementos para Visitas de Seguimiento'
+
+    def __str__(self):
+        """Return visit info."""
+        return str(self.visit)
 

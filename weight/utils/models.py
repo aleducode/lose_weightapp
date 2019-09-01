@@ -3,15 +3,17 @@
 # Django
 from django.db import models
 
-INSUFICIENCIA_CHOICES = [
-    ('No', 'No'),
-    ('Leve', 'Leve'),
-    ('Moderada', 'Moderada a grave'),
-]
 
 ACTIVIDAD_FISICA_CHOICES = [
+    ('no', 'no'),
     ('uno-dos', '1-2 veces por semana'),
     ('tres-mas', '3 o mas veces por semana'),
+]
+FUNCION_RENAL_CHOICES = [
+    ('Leve', ' Disfunción Leve'),
+    ('Moderada', 'Disfunción Moderada'),
+    ('Severa', 'Disfunción Severa'),
+    ('IRC Terminal', 'IRC Terminal'),
 ]
 
 
@@ -99,20 +101,9 @@ class VisitItems(models.Model):
         help_text='item for visit'
     )
 
-    alergia_naltrexona = models.BooleanField(
-        default=False,
-        help_text='item for visit'
-    )
-    
     embarazo = models.BooleanField(
         default=False,
         help_text='item for visit'
-    )
-
-    insuficiencia_hepatica = models.CharField(
-        'Visit Type',
-        max_length=10,
-        choices=INSUFICIENCIA_CHOICES,
     )
 
     glaucoma = models.BooleanField(
@@ -126,7 +117,7 @@ class VisitItems(models.Model):
     )
 
     actividad_fisica = models.CharField(
-        'Visit Type',
+        'Actividad Física',
         max_length=10,
         choices=ACTIVIDAD_FISICA_CHOICES,
     )
@@ -136,21 +127,17 @@ class VisitItems(models.Model):
         help_text='item for visit'
     )
 
-    funcion_renal = models.BooleanField(
+    palpitaciones_aumento_fc = models.BooleanField(
         default=False,
         help_text='item for visit'
     )
 
-    papitaciones_aumento_fc = models.BooleanField(
+    intolerancia_lactosa = models.BooleanField(
         default=False,
         help_text='item for visit'
     )
 
     tratamiento_levodopa = models.BooleanField(
-        default=False,
-        help_text='item for visit'
-    )
-    intolerancia_lactosa = models.BooleanField(
         default=False,
         help_text='item for visit'
     )
