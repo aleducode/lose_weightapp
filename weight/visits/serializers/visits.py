@@ -24,15 +24,13 @@ class VisitModelSerializer(serializers.ModelSerializer):
 
         model = Visit
         fields = (
-            'patient',
-            'weight',
-            'height',
-            'type_visit',
-            'risk_factor',
-            'created',
-            'result',
-            'concept',
-            'id'
+            'patient', 'weight',
+            'height', 'type_visit',
+            'risk_factor', 'created',
+            'result', 'concept',
+            'id', 'result_header',
+            'percentage_evolution',
+            'treatment_weaks'
         )
 
 
@@ -106,14 +104,21 @@ class CreateVisitModelModelSerializer(serializers.ModelSerializer):
                 patient=patient.pk,
                 type_visit='first'
             )
-            treatment_weaks = (timezone.now() - first_visit.created).days/7
+            treatment_weaks = int((timezone.now() - first_visit.created).days/7)
+            percentage_evolution = round(
+                abs(((data['weight'] - first_visit.weight)/first_visit.weight)*100), 1)
+            # Store variables
+            import ipdb; ipdb.set_trace()
+            data['percentage_evolution'] = percentage_evolution
+            data['treatment_weaks'] = treatment_weaks
+            
             if treatment_weaks >= 12:
-                percentage_evolution = abs(((data['weight'] - first_visit.weight)/first_visit.weight)*100)
+                
                 if percentage_evolution < 5:
                     concept = 'SUSPENDER'
-                    result = 'El paciente no hay reducido al menos el 5% de su peso inicial\
-                              en 12 o más semanas de tratamiento y debe suspender el tratamiento\
-                              de NALTREXONA - BUPROPION.'
+                    result = """El paciente no hay reducido al menos el 5% de su peso inicial
+                              en 12 o más semanas de tratamiento y debe suspender el tratamiento
+                              de NALTREXONA - BUPROPION."""
 
         data['patient'] = patient
         data['result'] = result
@@ -179,16 +184,29 @@ class FirstVisitComplementSerializer(serializers.ModelSerializer):
             if data['tratamiento_levodopa']:
                 result += 'PRECAUCIÓN. EL USO DE NALTREXONA - BUPROPION JUNTO CON ESTOS MEDICAMENTOS INCREMENTA EL RIESGO DE EVENTOS ADVERSOS.\n'
             concept = 'INDICADO'
-
+            # TODO: fix format
+            result_header = """Su paciente podría recibir NALTREXONA - BUPROPION como
+                            complemento de una dieta reducida en calorías y de actividad
+                            física para el control crónico del peso.
+                            Iniciar tratamiento con 1 comprimido (8mg/90mg) por la
+                            mañana (NO junto a comidas grasas). Los comprimidos no
+                            deben ser cortados, masticados ni triturados.\n
+                            Si se omitió una dosis, ésta debe saltearse y reanudar la
+                            administración al momento de la siguiente dosis."""
+        # Get visit
         first_visit = Visit.objects.get(
             patient=patient,
             type_visit='first')
         data['visit'] = first_visit
+
+        # Create complement visit information
         FirstVisitComplementInformation.objects.create(**data)
         first_visit.result = result
+        first_visit.result_header = result_header
         first_visit.concept = concept
         first_visit.save()
         first_visit = Visit.objects.get(pk=first_visit.pk)
+
         return first_visit
 
 
@@ -243,6 +261,8 @@ class FollowUpVisitComplementSerializer(serializers.ModelSerializer):
         """Analyize user data to emit a concept and result."""
         concept = None
         result = ''
+        result_header = ''
+        
         if data['depresion_mayor'] or data['otros_transtornos'] or data['hta_no_controlada'] or data['convulsiones'] or data['anorexia'] or data['abuso_alcohol'] or data['tratamiento_actual'] or data['embarazo'] or data['hepatitis_aguda'] or data['glaucoma'] or data['disfuncion_renal'] == 'IRC Terminal' or data['intolerancia_lactosa'] or data['suspendio']:
             concept = 'SUSPENDER'
         elif data['nauseas'] or data['constipacion'] or data['cefalea'] or data['mareos'] or data['insomnio'] or data['boca_seca'] or data['diarrea'] or data['vomitos'] or data['dolor_abdominal'] or data['otros_eventos']:
@@ -267,15 +287,56 @@ class FollowUpVisitComplementSerializer(serializers.ModelSerializer):
             if data['tratamiento_levodopa']:
                 result += 'EL USO DE NALTREXONA - BUPROPION JUNTO CON ESTOS MEDICAMENTOS INCREMENTA EL RIESGO DE EVENTOS ADVERSOS.\n'
             concept = 'CONTINUAR'
+        
         # Update result visit and create follow information complement
-        follow_visit = Visit.objects.get(pk=data['visit'])
-        data['visit'] = follow_visit
+        # TODO: collect and send by context
+        first_visit = Visit.objects.get(
+            patient=self.context['patient'],
+            type_visit='first'
+        )
+        visit = Visit.objects.get(pk=data['visit'])
+        data['visit'] = visit
         FollowUpVisitComplementInformation.objects.create(**data)
 
-        follow_visit.result = result
-        follow_visit.concept = concept
-        follow_visit.save()
+        if concept == 'CONTINUAR':
+            treatment_weaks = int((timezone.now() - first_visit.created).days/7)
+            import ipdb; ipdb.set_trace()
+            if treatment_weaks == 2:
+                result_header = """Su paciente podría continuar recibiendo NALTREXONA -
+                                BUPROPION como complemento de una dieta reducida en
+                                calorías y de actividad física para el control crónico del peso.\n
+                                Iniciar tratamiento con 1 comprimido (8mg/90mg) por la
+                                mañana y 1 comprimido (8mg/90mg) por la noche (NO junto
+                                a comidas grasas). Los comprimidos no deben ser cortados,
+                                masticados ni triturados.\n
+                                Si se omitió una dosis, ésta debe saltearse y reanudar la
+                                administración al momento de la siguiente dosis."""
+            elif treatment_weaks == 3:
+                result_header = """Su paciente podría continuar recibiendo NALTREXONA -
+                                BUPROPION como complemento de una dieta reducida en
+                                calorías y de actividad física para el control crónico del peso.\n
+                                Iniciar tratamiento con 2 comprimido (8mg/90mg) por la
+                                mañana y 1 comprimido (8mg/90mg) por la noche (NO junto
+                                a comidas grasas). Los comprimidos no deben ser cortados,
+                                masticados ni triturados.\n
+                                Si se omitió una dosis, ésta debe saltearse y reanudar la
+                                administración al momento de la siguiente dosis."""
+            elif treatment_weaks > 4:
+                result_header = """Su paciente podría continuar recibiendo NALTREXONA -
+                                BUPROPION como complemento de una dieta reducida en
+                                calorías y de actividad física para el control crónico del peso.
+                                Iniciar tratamiento con 2 comprimido (8mg/90mg) por la
+                                mañana y 2 comprimido (8mg/90mg) por la noche (NO junto
+                                a comidas grasas). Los comprimidos no deben ser cortados,
+                                masticados ni triturados.
+                                Si se omitió una dosis, ésta debe saltearse y reanudar la
+                                administración al momento de la siguiente dosis."""
+        
+        visit.result = result
+        visit.concept = concept
+        visit.result_header = result_header
+        visit.save()
         # Refresh info to return
-        follow_visit = Visit.objects.get(pk=follow_visit.pk)
+        follow_visit = Visit.objects.get(pk=visit.pk)
 
         return follow_visit

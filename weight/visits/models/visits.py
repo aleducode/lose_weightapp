@@ -73,7 +73,28 @@ class Visit(WeightModel):
     result = models.TextField(
         'Resultado de visita',
         null=True,
-        blank=True
+        blank=True,
+        default=""
+    )
+    result_header = models.TextField(
+        'Encabezado de visita',
+        null=True,
+        blank=True,
+        default=""
+    )
+    treatment_weaks = models.CharField(
+        'Semanas de tratamiento',
+        null=True,
+        blank=True,
+        max_length=2,
+        default=""
+    )
+    percentage_evolution = models.CharField(
+        'Porcentaje de evolución del peso',
+        null=True,
+        blank=True,
+        max_length=4,
+        default=""
     )
 
     class Meta:
