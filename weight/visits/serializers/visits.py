@@ -108,7 +108,6 @@ class CreateVisitModelModelSerializer(serializers.ModelSerializer):
             percentage_evolution = round(
                 abs(((data['weight'] - first_visit.weight)/first_visit.weight)*100), 1)
             # Store variables
-            import ipdb; ipdb.set_trace()
             data['percentage_evolution'] = percentage_evolution
             data['treatment_weaks'] = treatment_weaks
             
@@ -300,7 +299,6 @@ class FollowUpVisitComplementSerializer(serializers.ModelSerializer):
 
         if concept == 'CONTINUAR':
             treatment_weaks = int((timezone.now() - first_visit.created).days/7)
-            import ipdb; ipdb.set_trace()
             if treatment_weaks == 2:
                 result_header = """Su paciente podría continuar recibiendo NALTREXONA -
                                 BUPROPION como complemento de una dieta reducida en
