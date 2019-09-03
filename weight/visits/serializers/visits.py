@@ -86,8 +86,7 @@ class CreateVisitModelModelSerializer(serializers.ModelSerializer):
         concept = ''
         patient = self.context['patient']
         if data['type_visit'] == 'first':
-            imc = self.imc_calcle(self.data['height'], self.data['weight'])
-
+            imc = self.imc_calcle(self.data['weight'], self.data['height'])
             if imc < 27:
                 result = 'NALTREXONA - BUPROPION no está indicado si el IMC es menor a 27.'
                 concept = 'NO INDICADO'
