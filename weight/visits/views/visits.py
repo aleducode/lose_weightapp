@@ -57,7 +57,7 @@ class VisitViewSet(mixins.ListModelMixin,
         """Return member visits."""
         return Visit.objects.filter(
             patient=self.patient
-        )
+        ).order_by('created')
 
     def get_serializer_context(self):
         """Add patient to a serializer context."""
