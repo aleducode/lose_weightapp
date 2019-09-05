@@ -8,10 +8,17 @@ from django.utils import timezone
 from weight.visits.models import (
     Visit,
     FirstVisitComplementInformation,
-    FollowUpVisitComplementInformation)
-
+    FollowUpVisitComplementInformation,
+    INSUFICIENCIA_CHOICES)
+from weight.utils.models import FUNCION_RENAL_CHOICES
 # Serializer
 from weight.patients.serializers import PatientModelSerializer
+
+# Utils
+from utils.text import (
+    first_visit_contra_indicado,
+    follow_visit_suspender
+    )
 
 
 class VisitModelSerializer(serializers.ModelSerializer):
@@ -65,6 +72,8 @@ class CreateVisitModelModelSerializer(serializers.ModelSerializer):
             )
             if not first_visit:
                 raise serializers.ValidationError('To create follow-Up visit, needs first visit creation.')
+            elif first_visit.get().concept in ['NO INDICADO', 'SUSPENDER']:
+                raise serializers.ValidationError('User concept is NO INDICADO or SUSPENDER.')
         return data
 
     def validate(self, data):
@@ -104,15 +113,16 @@ class CreateVisitModelModelSerializer(serializers.ModelSerializer):
                 type_visit='first'
             )
             treatment_weaks = int((timezone.now() - first_visit.created).days/7)
-            percentage_evolution = round(
-                abs(((data['weight'] - first_visit.weight)/first_visit.weight)*100), 1)
+            # TODO: review valude (+/-)
+            percentage_evolution = round((
+                ((data['weight'] - first_visit.weight)/first_visit.weight)*100), 1)
             # Store variables
             data['percentage_evolution'] = percentage_evolution
             data['treatment_weaks'] = treatment_weaks
-            
+
             if treatment_weaks >= 12:
-                
-                if percentage_evolution < 5:
+
+                if percentage_evolution > -5:
                     concept = 'SUSPENDER'
                     result = """El paciente no hay reducido al menos el 5% de su peso inicial
                               en 12 o más semanas de tratamiento y debe suspender el tratamiento
@@ -144,7 +154,7 @@ class FirstVisitComplementSerializer(serializers.ModelSerializer):
         if not first_visit:
             raise serializers.ValidationError('first visit is required to create complement info.')
         elif first_visit.get().concept in ['NO INDICADO', 'SUSPENDER']:
-            raise serializers.ValidationError('User concept is NO INDICADO.')
+            raise serializers.ValidationError('User concept is NO INDICADO or SUSPENDER.')
         first_complement_visit = FirstVisitComplementInformation.objects.filter(
             visit=first_visit.get().pk
         )
@@ -157,9 +167,33 @@ class FirstVisitComplementSerializer(serializers.ModelSerializer):
         """Analyize user data to emit a concept and result."""
         patient = self.context['patient']
         concept = None
-        result = ''
-        if data['depresion_mayor'] or data['otros_transtornos'] or data['hta_no_controlada'] or data['convulsiones'] or data['anorexia'] or data['tratamiento_actual'] or data['alergia_naltrexona'] or data['embarazo'] or data['insuficiencia_hepatica'] == 'Moderada' or data['glaucoma'] or data['funcion_renal'] == 'IRC Terminal' or data['intolerancia_lactosa']:
+        result = result_header = reason_contra_indicado = ''
+        keys_contra_indicado = ['depresion_mayor', 'otros_transtornos', 'hta_no_controlada',
+                                'convulsiones', 'anorexia', 'abuso_alcohol', 'tratamiento_actual',
+                                'alergia_naltrexona', 'embarazo', 'insuficiencia_hepatica',
+                                'glaucoma', 'funcion_renal', 'intolerancia_lactosa']
+
+        for value in keys_contra_indicado:
+            if value not in ['insuficiencia_hepatica', 'funcion_renal'] and data[value]:
+                reason_contra_indicado += (first_visit_contra_indicado[value])
+            elif value == 'insuficiencia_hepatica':
+                if data[value] == 'moderada':
+                    reason_contra_indicado += (
+                        '{}: {}\n'.format(
+                            first_visit_contra_indicado[value],
+                            INSUFICIENCIA_CHOICES[2][1])
+                        )
+            elif value == 'funcion_renal':
+                if data[value] == 'irc-terminal':
+                    reason_contra_indicado += (
+                        '{}:{}\n'.format(first_visit_contra_indicado[value], FUNCION_RENAL_CHOICES[4][1])
+                        )
+        if reason_contra_indicado:
             concept = 'CONTRA INDICADO'
+            result = reason_contra_indicado
+            result_header = """El paciente tiene las siguientes
+                            contraindicaciones para recibir NALTREXONA
+                            - BUPROPION."""
         else:
             if patient.age() > 65:
                 result += 'USAR CON PRECAUCIÓN EN MAYORES DE 65 AÑOS POR MAYOR RIESGO DE EVENTOS ADVERSOS DEBIDO A LA ELIMINACIÓN RENAL DE NALTREXONA - BUPROPION.\n'
@@ -175,7 +209,7 @@ class FirstVisitComplementSerializer(serializers.ModelSerializer):
                 result += 'ES RECOMENDABLE INICIAR ACTIVIDAD FÍSICA O INCREMENTAR LA FRECUENCIA A 3 VECES POR SEMANA.\n'
             if not data['dieta_hipocalorica']:
                 result += 'RECOMENDAR DIETA HIPOCALÓRICA.\n'
-            if data['funcion_renal'] in ['Moderada', 'Severa']:
+            if data['funcion_renal'] in ['moderada', 'severa']:
                 result += 'PRECAUCIÓN. LA MÁXIMA DOSIS RECOMENDADA EN EL SEGUIMIENTO ES 1 COMPRIMIDO A LA MAÑANA Y 1 COMPRIMIDO A LA NOCHE.\n'
             if data['palpitaciones_aumento_fc']:
                 result += 'NALTREXONA - BUPROPION PUEDE AUMENTAR LA FRECUENCIA CARDIACA Y LA PRESIÓN ARTERIAL POR LO QUE SE RECOMIENDA UN CONTROL ESTRICTO DE LA FC Y LA TA.\n'
@@ -259,12 +293,40 @@ class FollowUpVisitComplementSerializer(serializers.ModelSerializer):
         """Analyize user data to emit a concept and result."""
         concept = None
         result = ''
-        result_header = ''
-        
-        if data['depresion_mayor'] or data['otros_transtornos'] or data['hta_no_controlada'] or data['convulsiones'] or data['anorexia'] or data['abuso_alcohol'] or data['tratamiento_actual'] or data['embarazo'] or data['hepatitis_aguda'] or data['glaucoma'] or data['disfuncion_renal'] == 'IRC Terminal' or data['intolerancia_lactosa'] or data['suspendio']:
+        result_header = reason_suspender = reason_evaluar = ''
+        keys_visit_suspender = ['depresion_mayor', 'otros_transtornos', 'hta_no_controlada',
+                                'convulsiones', 'anorexia', 'abuso_alcohol',
+                                'tratamiento_actual', 'embarazo',
+                                'hepatitis_aguda', 'glaucoma', 'disfuncion_renal',
+                                'intolerancia_lactosa', 'suspendio']
+        for value in keys_visit_suspender:
+            if value != 'disfuncion_renal' and data[value]:
+                reason_suspender += (follow_visit_suspender[value])
+            elif value == 'disfuncion_renal':
+                if data[value] == 'irc-terminal':
+                    reason_suspender += (
+                        '{}:{}\n'.format(
+                            follow_visit_suspender[value], FUNCION_RENAL_CHOICES[4][1])
+                        )
+        if reason_suspender:
             concept = 'SUSPENDER'
-        elif data['nauseas'] or data['constipacion'] or data['cefalea'] or data['mareos'] or data['insomnio'] or data['boca_seca'] or data['diarrea'] or data['vomitos'] or data['dolor_abdominal'] or data['otros_eventos']:
+            result = reason_suspender
+            result_header = """El paciente tiene las siguientes
+                            contraindicaciones y debe suspender el
+                            tratamiento de NALTREXONA - BUPROPION."""
+        
+        keys_visit_evaluar = ['nauseas', 'constipacion', 'cefalea',
+                              'mareos', 'insomnio', 'boca_seca',
+                              'diarrea', 'vomitos', 'dolor_abdominal',
+                              'otros_eventos']
+        for value in keys_visit_evaluar:
+            if data[value]:
+                reason_evaluar += (follow_visit_suspender[value])
             concept = 'EVALUAR LA CONTINUIDAD DEL TRATAMIENTO'
+            result = reason_evaluar
+            result_header = """Su paciente podría continuar recibiendo NALTREXONA -
+                            BUPROPION como complemento de una dieta reducida en
+                            calorías y de actividad física para el control crónico del peso."""
         else:
             if data['tratamiento_hipoglucemiantes']:
                 result += 'DEBE TENERSE PRECAUCIÓN CON EL RIESGO DE HIPOGLUCEMIA Y CONSIDERAR DISMINUIR DOSIS DE HIPOGLUCEMIANTES. SE RECOMIENDA MEDICIÓN PERIÓDICA DE GLUCEMIA.\n'
@@ -285,7 +347,7 @@ class FollowUpVisitComplementSerializer(serializers.ModelSerializer):
             if data['tratamiento_levodopa']:
                 result += 'EL USO DE NALTREXONA - BUPROPION JUNTO CON ESTOS MEDICAMENTOS INCREMENTA EL RIESGO DE EVENTOS ADVERSOS.\n'
             concept = 'CONTINUAR'
-        
+
         # Update result visit and create follow information complement
         # TODO: collect and send by context
         first_visit = Visit.objects.get(
@@ -328,7 +390,7 @@ class FollowUpVisitComplementSerializer(serializers.ModelSerializer):
                                 masticados ni triturados.
                                 Si se omitió una dosis, ésta debe saltearse y reanudar la
                                 administración al momento de la siguiente dosis."""
-        
+
         visit.result = result
         visit.concept = concept
         visit.result_header = result_header

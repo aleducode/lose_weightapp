@@ -1,0 +1,63 @@
+"""Data to respone by key."""
+
+first_visit_contra_indicado = {
+    'depresion_mayor': """Depresión mayor, trastorno bipolar, manía o ideación suicida.\n""",
+    'otros_transtornos': """Otros trastornos psiquiátricos{incluidos en la cesación tabáquica}.\n""",
+    'hta_no_controlada': """HTA no controlada.\n""",
+    'convulsiones': """Convulsiones o Epilepsia.\n""",
+    'anorexia': """Anorexia / Bulimia.\n""",
+    'abuso_alcohol': """Abuso de alcohol o abandono
+    abrupto reciente de alcohol.\n""",
+    'tratamiento_actual': """Tratamiento actual con: BENZODIACEPINAS, BARBITURICOS,
+                            ANTIEPILEPTICOS, ANTIPSICOTICOS,
+                            OPIOIDES O AGONISTAS OPIACEOS,
+                            BUPROPION, IMAO, RITONAVIR,
+                            LOPINAVIR, EFAVIRENZ,
+                            CARBAMACEPINA, ANTIDEPRESIVOS,
+                            DROGAS METABOLIZADAS POR
+                            CYP2D6 (TAMOXIFENO).\n""",
+    'alergia_naltrexona': """Alergia conocida a Naltrexona o
+                                Bupropion.\n""",
+    'embarazo': """Embarazo o Lactancia.\n""",
+    'insuficiencia_hepatica': """Insuficiencia Hepática.""",
+    'glaucoma': """Glaucoma de ángulo cerrado.\n""",
+    'funcion_renal': "Función renal.",
+    'intolerancia_lactosa': """Intolerancia a la lactosa.\n"""}
+
+follow_visit_suspender = {
+    'depresion_mayor': """Depresión mayor, trastorno bipolar, manía o ideación suicida.\n""",
+    'otros_transtornos': """Otros trastornos psiquiátricos (incluidos en la cesación tabáquica).\n""",
+    'hta_no_controlada': """HTA no controlada.\n""",
+    'convulsiones': """Convulsiones o Epilepsia.\n""",
+    'anorexia': """Anorexia / Bulimia.\n""",
+    'abuso_alcohol': """Abuso de alcohol o abandono
+    abrupto reciente de alcohol.\n""",
+    'tratamiento_actual': """Tratamiento actual con: BENZODIACEPINAS, BARBITURICOS,
+                                ANTIEPILEPTICOS, ANTIPSICOTICOS,
+                                OPIOIDES O AGONISTAS OPIACEOS,
+                                BUPROPION, IMAO, RITONAVIR,
+                                LOPINAVIR, EFAVIRENZ,
+                                CARBAMACEPINA, ANTIDEPRESIVOS,
+                                DROGAS METABOLIZADAS POR
+                                CYP2D6 (TAMOXIFENO).\n""",
+    'embarazo': """Embarazo o Lactancia.\n""",
+
+    'hepatitis_aguda': """Hepatitis aguda o fallo hepático.\n""",
+    'glaucoma': """Glaucoma de ángulo cerrado.\n""",
+    'disfuncion_renal': "Disfunción renal.",
+    'intolerancia_lactosa': "Intolerancia a la lactosa.\n",
+    'suspendio': """Suspendió el tratamiento.\n"""
+}
+
+follow_visit_evaluar = {
+    'nauseas': "Náuseas",
+    'constipacion': "Constipación",
+    'cefalea': "Cefalea",
+    'mareos': "Mareos",
+    'insomnio': "Insomnio",
+    'boca_seca': "Boca seca",
+    'diarrea': "Diarrea",
+    'vomitos': "Vómitos",
+    'dolor_abdominal': "Dolor abdominal o dispesia",
+    'otros_evento': "Otros eventos"
+}

@@ -93,7 +93,7 @@ class Visit(WeightModel):
         'Porcentaje de evolución del peso',
         null=True,
         blank=True,
-        max_length=4,
+        max_length=10,
         default=""
     )
 
