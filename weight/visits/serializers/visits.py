@@ -17,8 +17,9 @@ from weight.patients.serializers import PatientModelSerializer
 # Utils
 from utils.text import (
     first_visit_contra_indicado,
-    follow_visit_suspender
-    )
+    follow_visit_suspender,
+    follow_visit_evaluar
+)
 
 
 class VisitModelSerializer(serializers.ModelSerializer):
@@ -175,19 +176,19 @@ class FirstVisitComplementSerializer(serializers.ModelSerializer):
 
         for value in keys_contra_indicado:
             if value not in ['insuficiencia_hepatica', 'funcion_renal'] and data[value]:
-                reason_contra_indicado += (first_visit_contra_indicado[value])
+                reason_contra_indicado += first_visit_contra_indicado[value]
             elif value == 'insuficiencia_hepatica':
                 if data[value] == 'moderada':
                     reason_contra_indicado += (
                         '{}: {}\n'.format(
                             first_visit_contra_indicado[value],
                             INSUFICIENCIA_CHOICES[2][1])
-                        )
+                    )
             elif value == 'funcion_renal':
                 if data[value] == 'irc-terminal':
                     reason_contra_indicado += (
                         '{}:{}\n'.format(first_visit_contra_indicado[value], FUNCION_RENAL_CHOICES[4][1])
-                        )
+                    )
         if reason_contra_indicado:
             concept = 'CONTRA INDICADO'
             result = reason_contra_indicado
@@ -293,60 +294,72 @@ class FollowUpVisitComplementSerializer(serializers.ModelSerializer):
         """Analyize user data to emit a concept and result."""
         concept = None
         result = ''
-        result_header = reason_suspender = reason_evaluar = ''
+        result_header = reason_suspender  = ''
         keys_visit_suspender = ['depresion_mayor', 'otros_transtornos', 'hta_no_controlada',
                                 'convulsiones', 'anorexia', 'abuso_alcohol',
                                 'tratamiento_actual', 'embarazo',
                                 'hepatitis_aguda', 'glaucoma', 'disfuncion_renal',
                                 'intolerancia_lactosa', 'suspendio']
+
+        keys_visit_evaluar = ['nauseas', 'constipacion', 'cefalea',
+                              'mareos', 'insomnio', 'boca_seca',
+                              'diarrea', 'vomitos', 'dolor_abdominal',
+                              'otros_eventos']
+
         for value in keys_visit_suspender:
             if value != 'disfuncion_renal' and data[value]:
-                reason_suspender += (follow_visit_suspender[value])
+                reason_suspender += follow_visit_suspender[value]
             elif value == 'disfuncion_renal':
                 if data[value] == 'irc-terminal':
                     reason_suspender += (
                         '{}:{}\n'.format(
                             follow_visit_suspender[value], FUNCION_RENAL_CHOICES[4][1])
-                        )
+                    )
+        for value in keys_visit_evaluar:
+                if data[value]:
+                    reason_suspender += 'Evaluar continuidad debido a: {}'.format(
+                        follow_visit_evaluar[value])
         if reason_suspender:
             concept = 'SUSPENDER'
             result = reason_suspender
             result_header = """El paciente tiene las siguientes
                             contraindicaciones y debe suspender el
                             tratamiento de NALTREXONA - BUPROPION."""
-        
-        keys_visit_evaluar = ['nauseas', 'constipacion', 'cefalea',
-                              'mareos', 'insomnio', 'boca_seca',
-                              'diarrea', 'vomitos', 'dolor_abdominal',
-                              'otros_eventos']
-        for value in keys_visit_evaluar:
-            if data[value]:
-                reason_evaluar += (follow_visit_suspender[value])
-            concept = 'EVALUAR LA CONTINUIDAD DEL TRATAMIENTO'
-            result = reason_evaluar
-            result_header = """Su paciente podría continuar recibiendo NALTREXONA -
-                            BUPROPION como complemento de una dieta reducida en
-                            calorías y de actividad física para el control crónico del peso."""
         else:
-            if data['tratamiento_hipoglucemiantes']:
-                result += 'DEBE TENERSE PRECAUCIÓN CON EL RIESGO DE HIPOGLUCEMIA Y CONSIDERAR DISMINUIR DOSIS DE HIPOGLUCEMIANTES. SE RECOMIENDA MEDICIÓN PERIÓDICA DE GLUCEMIA.\n'
             if data['factores_predisponentes']:
                 result += 'PRECAUCIÓN.PARA REDUCIR EL RIESGO DE CONVULSIONES SE RECOMIENDA UNA DOSIS TOTAL DE MAXIMO 4 COMPRIMIDOS POR DÍA. DIVIDIR LA DOSIS DIARIA EN DOS TOMAS, ESCALAR LA DOSIS DE MANERA GRADUAL.\n'
             if data['tratamiento_beta_bloqueantes']:
                 result += ' LA MÁXIMA DOSIS RECOMENDADA ES 1 COMPRIMIDO A LA MAÑANA Y 1 COMPRIMIDO A LA NOCHE.\n'
+            if data['disfuncion_renal'] in ['moderada', 'severa']:
+                result += 'PRECAUCIÓN. LA MÁXIMA DOSIS RECOMENDADA EN EL SEGUIMIENTO ES 1 COMPRIMIDO A LA MAÑANA Y 1 COMPRIMIDO A LA NOCHE.\n'
+            if result != '':
+                concept = 'AJUSTAR DOSIS'
+                result_header = """Su paciente podría continuar recibiendo NALTREXONA - BUPROPION como
+                                complemento de una dieta reducida en calorías y de actividad física para el
+                                control crónico del peso."""
+        if not concept:
+            if data['tratamiento_hipoglucemiantes']:
+                result += 'DEBE TENERSE PRECAUCIÓN CON EL RIESGO DE HIPOGLUCEMIA Y CONSIDERAR DISMINUIR DOSIS DE HIPOGLUCEMIANTES. SE RECOMIENDA MEDICIÓN PERIÓDICA DE GLUCEMIA.\n'
             if data['actividad_fisica'] in ['no', 'uno-dos']:
                 result += 'ES RECOMENDABLE INICIAR ACTIVIDAD FÍSICA O INCREMENTAR LA FRECUENCIA A 3 VECES POR SEMANA.\n'
             if not data['dieta_hipocalorica']:
                 result += 'RECOMENDAR DIETA HIPOCALÓRICA.\n'
-            if data['disfuncion_renal'] in ['Moderada', 'Severa']:
-                result += 'PRECAUCIÓN. LA MÁXIMA DOSIS RECOMENDADA EN EL SEGUIMIENTO ES 1 COMPRIMIDO A LA MAÑANA Y 1 COMPRIMIDO A LA NOCHE.\n'
             if data['palpitaciones_aumento_fc']:
                 result += 'NALTREXONA - BUPROPION PUEDE AUMENTAR LA FRECUENCIA CARDIACA Y LA PRESIÓN ARTERIAL POR LO QUE SE RECOMIENDA UN CONTROL ESTRICTO DE LA FC Y LA TA.\n'
             if data['hipertension_arterial']:
                 result += ' NALTREXONA - BUPROPION PUEDE AUMENTAR LA PRESIÓN ARTERIAL POR LO QUE SE RECOMIENDA UN CONTROL ESTRICTO LA TA.\n'
             if data['tratamiento_levodopa']:
                 result += 'EL USO DE NALTREXONA - BUPROPION JUNTO CON ESTOS MEDICAMENTOS INCREMENTA EL RIESGO DE EVENTOS ADVERSOS.\n'
+            if result != '':
+                concept = 'ALERTA'
+                result_header = """Su paciente podría continuar recibiendo NALTREXONA - BUPROPION como
+                                complemento de una dieta reducida en calorías y de actividad física para el
+                                control crónico del peso."""
+        if concept not in ['ALERTA', 'SUSPENDER', 'AJUSTAR DOSIS']:
             concept = 'CONTINUAR'
+            result_header = """Su paciente podría continuar recibiendo NALTREXONA -
+                                BUPROPION como complemento de una dieta reducida en
+                                calorías y de actividad física para el control crónico del peso.\n"""
 
         # Update result visit and create follow information complement
         # TODO: collect and send by context
@@ -361,9 +374,7 @@ class FollowUpVisitComplementSerializer(serializers.ModelSerializer):
         if concept == 'CONTINUAR':
             treatment_weaks = int((timezone.now() - first_visit.created).days/7)
             if treatment_weaks == 2:
-                result_header = """Su paciente podría continuar recibiendo NALTREXONA -
-                                BUPROPION como complemento de una dieta reducida en
-                                calorías y de actividad física para el control crónico del peso.\n
+                result_header = """
                                 Iniciar tratamiento con 1 comprimido (8mg/90mg) por la
                                 mañana y 1 comprimido (8mg/90mg) por la noche (NO junto
                                 a comidas grasas). Los comprimidos no deben ser cortados,
@@ -371,9 +382,7 @@ class FollowUpVisitComplementSerializer(serializers.ModelSerializer):
                                 Si se omitió una dosis, ésta debe saltearse y reanudar la
                                 administración al momento de la siguiente dosis."""
             elif treatment_weaks == 3:
-                result_header = """Su paciente podría continuar recibiendo NALTREXONA -
-                                BUPROPION como complemento de una dieta reducida en
-                                calorías y de actividad física para el control crónico del peso.\n
+                result_header = """
                                 Iniciar tratamiento con 2 comprimido (8mg/90mg) por la
                                 mañana y 1 comprimido (8mg/90mg) por la noche (NO junto
                                 a comidas grasas). Los comprimidos no deben ser cortados,
@@ -381,9 +390,7 @@ class FollowUpVisitComplementSerializer(serializers.ModelSerializer):
                                 Si se omitió una dosis, ésta debe saltearse y reanudar la
                                 administración al momento de la siguiente dosis."""
             elif treatment_weaks > 4:
-                result_header = """Su paciente podría continuar recibiendo NALTREXONA -
-                                BUPROPION como complemento de una dieta reducida en
-                                calorías y de actividad física para el control crónico del peso.
+                result_header = """
                                 Iniciar tratamiento con 2 comprimido (8mg/90mg) por la
                                 mañana y 2 comprimido (8mg/90mg) por la noche (NO junto
                                 a comidas grasas). Los comprimidos no deben ser cortados,
