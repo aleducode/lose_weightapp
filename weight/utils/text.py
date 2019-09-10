@@ -46,7 +46,7 @@ follow_visit_suspender = {
     'glaucoma': """Glaucoma de ángulo cerrado.\n""",
     'disfuncion_renal': "Disfunción renal.",
     'intolerancia_lactosa': "Intolerancia a la lactosa.\n",
-    'suspendio': """Suspendió el tratamiento.\n"""
+    'suspendio': """Suspendió el tratamiento.\n""",
 }
 
 follow_visit_evaluar = {
@@ -59,5 +59,5 @@ follow_visit_evaluar = {
     'diarrea': "Diarrea",
     'vomitos': "Vómitos",
     'dolor_abdominal': "Dolor abdominal o dispesia",
-    'otros_evento': "Otros eventos"
+    'otros_eventos': "Otros eventos"
 }
