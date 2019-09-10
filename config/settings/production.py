@@ -4,7 +4,7 @@ import sentry_sdk
 
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
-from sentry_sdk.integrations.celery import CeleryIntegration
+
 
 from .base import *  # noqa
 from .base import env
@@ -171,5 +171,5 @@ sentry_logging = LoggingIntegration(
 )
 sentry_sdk.init(
     dsn=SENTRY_DSN,
-    integrations=[sentry_logging, DjangoIntegration(), CeleryIntegration()],
+    integrations=[sentry_logging, DjangoIntegration()],
 )
