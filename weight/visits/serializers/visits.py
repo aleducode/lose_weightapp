@@ -294,7 +294,7 @@ class FollowUpVisitComplementSerializer(serializers.ModelSerializer):
         """Analyize user data to emit a concept and result."""
         concept = None
         result = ''
-        result_header = reason_suspender  = ''
+        result_header = reason_suspender = ''
         keys_visit_suspender = ['depresion_mayor', 'otros_transtornos', 'hta_no_controlada',
                                 'convulsiones', 'anorexia', 'abuso_alcohol',
                                 'tratamiento_actual', 'embarazo',
