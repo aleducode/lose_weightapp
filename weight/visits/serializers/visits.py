@@ -357,7 +357,7 @@ class FollowUpVisitComplementSerializer(serializers.ModelSerializer):
             if data['tratamiento_levodopa']:
                 result += 'EL USO DE NALTREXONA - BUPROPION JUNTO CON ESTOS MEDICAMENTOS INCREMENTA EL RIESGO DE EVENTOS ADVERSOS.\n'
             if result != '':
-                concept = 'ALERTA'
+                concept = 'CONTINUAR'
                 result_header = """Su paciente podría continuar recibiendo NALTREXONA - BUPROPION como
                                 complemento de una dieta reducida en calorías y de actividad física para el
                                 control crónico del peso."""
