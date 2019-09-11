@@ -381,27 +381,27 @@ class FollowUpVisitComplementSerializer(serializers.ModelSerializer):
             treatment_weaks = int((timezone.now() - first_visit.created).days/7)
             if treatment_weaks == 2:
                 result_header = """
-                                Iniciar tratamiento con 1 comprimido (8mg/90mg) por la
-                                mañana y 1 comprimido (8mg/90mg) por la noche (NO junto
-                                a comidas grasas). Los comprimidos no deben ser cortados,
+                                Iniciar tratamiento con 1 comprimido (8mg/90mg) por la 
+                                mañana y 1 comprimido (8mg/90mg) por la noche (NO junto 
+                                a comidas grasas). Los comprimidos no deben ser cortados, 
                                 masticados ni triturados.\n
-                                Si se omitió una dosis, ésta debe saltearse y reanudar la
+                                Si se omitió una dosis, ésta debe saltearse y reanudar la 
                                 administración al momento de la siguiente dosis."""
             elif treatment_weaks == 3:
                 result_header = """
-                                Iniciar tratamiento con 2 comprimido (8mg/90mg) por la
-                                mañana y 1 comprimido (8mg/90mg) por la noche (NO junto
-                                a comidas grasas). Los comprimidos no deben ser cortados,
+                                Iniciar tratamiento con 2 comprimido (8mg/90mg) por la  
+                                mañana y 1 comprimido (8mg/90mg) por la noche (NO junto 
+                                a comidas grasas). Los comprimidos no deben ser cortados, 
                                 masticados ni triturados.\n
-                                Si se omitió una dosis, ésta debe saltearse y reanudar la
+                                Si se omitió una dosis, ésta debe saltearse y reanudar la 
                                 administración al momento de la siguiente dosis."""
             elif treatment_weaks > 4:
                 result_header = """
-                                Iniciar tratamiento con 2 comprimido (8mg/90mg) por la
-                                mañana y 2 comprimido (8mg/90mg) por la noche (NO junto
-                                a comidas grasas). Los comprimidos no deben ser cortados,
+                                Iniciar tratamiento con 2 comprimido (8mg/90mg) por la  
+                                mañana y 2 comprimido (8mg/90mg) por la noche (NO junto 
+                                a comidas grasas). Los comprimidos no deben ser cortados, 
                                 masticados ni triturados.
-                                Si se omitió una dosis, ésta debe saltearse y reanudar la
+                                Si se omitió una dosis, ésta debe saltearse y reanudar la 
                                 administración al momento de la siguiente dosis."""
 
         visit.result = result
