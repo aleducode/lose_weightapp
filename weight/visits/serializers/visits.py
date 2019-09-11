@@ -294,7 +294,7 @@ class FollowUpVisitComplementSerializer(serializers.ModelSerializer):
         """Analyize user data to emit a concept and result."""
         concept = None
         result = ''
-        result_header = reason_suspender = ''
+        result_header = reason_suspender = reason_evaluar = ''
         keys_visit_suspender = ['depresion_mayor', 'otros_transtornos', 'hta_no_controlada',
                                 'convulsiones', 'anorexia', 'abuso_alcohol',
                                 'tratamiento_actual', 'embarazo',
@@ -317,15 +317,21 @@ class FollowUpVisitComplementSerializer(serializers.ModelSerializer):
                     )
         for value in keys_visit_evaluar:
                 if data[value]:
-                    reason_suspender += 'Evaluar continuidad debido a: {}'.format(
+                    reason_evaluar += 'Evaluar continuidad debido a: {}'.format(
                         follow_visit_evaluar[value])
-        if reason_suspender:
+        if reason_evaluar:
+            concept = 'CONTINUAR'
+            result = reason_evaluar
+            result_header = """Su paciente podría continuar recibiendo NALTREXONA -
+                                BUPROPION como complemento de una dieta reducida en
+                                calorías y de actividad física para el control crónico del peso.\n"""
+        if not reason_evaluar and reason_suspender:
             concept = 'SUSPENDER'
             result = reason_suspender
             result_header = """El paciente tiene las siguientes
                             contraindicaciones y debe suspender el
                             tratamiento de NALTREXONA - BUPROPION."""
-        else:
+        elif not concept:
             if data['factores_predisponentes']:
                 result += 'PRECAUCIÓN.PARA REDUCIR EL RIESGO DE CONVULSIONES SE RECOMIENDA UNA DOSIS TOTAL DE MAXIMO 4 COMPRIMIDOS POR DÍA. DIVIDIR LA DOSIS DIARIA EN DOS TOMAS, ESCALAR LA DOSIS DE MANERA GRADUAL.\n'
             if data['tratamiento_beta_bloqueantes']:
