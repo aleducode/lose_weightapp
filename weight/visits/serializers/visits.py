@@ -362,7 +362,6 @@ class FollowUpVisitComplementSerializer(serializers.ModelSerializer):
                 result_header = """Su paciente podría continuar recibiendo NALTREXONA - BUPROPION como
                                 complemento de una dieta reducida en calorías y de actividad física para el
                                 control crónico del peso."""
-        import ipdb; ipdb.set_trace()
         if concept not in ['ALERTA', 'SUSPENDER', 'AJUSTAR DOSIS']:
             concept = 'CONTINUAR'
             result_header = """Su paciente podría continuar recibiendo NALTREXONA -
