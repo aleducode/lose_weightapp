@@ -319,13 +319,14 @@ class FollowUpVisitComplementSerializer(serializers.ModelSerializer):
                 if data[value]:
                     reason_evaluar += 'Evaluar continuidad debido a: {}'.format(
                         follow_visit_evaluar[value])
-        if reason_evaluar:
+        if reason_evaluar and not reason_suspender:
             concept = 'CONTINUAR'
             result = reason_evaluar
             result_header = """Su paciente podría continuar recibiendo NALTREXONA -
                                 BUPROPION como complemento de una dieta reducida en
                                 calorías y de actividad física para el control crónico del peso.\n"""
-        if not reason_evaluar and reason_suspender:
+        # Priority to 'suspender'
+        if reason_suspender:
             concept = 'SUSPENDER'
             result = reason_suspender
             result_header = """El paciente tiene las siguientes
@@ -361,6 +362,7 @@ class FollowUpVisitComplementSerializer(serializers.ModelSerializer):
                 result_header = """Su paciente podría continuar recibiendo NALTREXONA - BUPROPION como
                                 complemento de una dieta reducida en calorías y de actividad física para el
                                 control crónico del peso."""
+        import ipdb; ipdb.set_trace()
         if concept not in ['ALERTA', 'SUSPENDER', 'AJUSTAR DOSIS']:
             concept = 'CONTINUAR'
             result_header = """Su paciente podría continuar recibiendo NALTREXONA -
