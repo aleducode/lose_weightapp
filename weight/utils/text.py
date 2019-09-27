@@ -22,7 +22,9 @@ first_visit_contra_indicado = {
     'insuficiencia_hepatica': """Insuficiencia Hepática.""",
     'glaucoma': """Glaucoma de ángulo cerrado.\n""",
     'funcion_renal': "Función renal.",
-    'intolerancia_lactosa': """Intolerancia a la lactosa.\n"""}
+    'intolerancia_lactosa': """Intolerancia a la lactosa.\n""",
+    'cirugia_planificada': """EL USO DE NALTREXONA - BUPROPION ESTÁ CONTRA INDICADO AL MENOS 3 DÍAS ANTES DE LA CIRUGÍA PROGRAMADA."""
+    }
 
 follow_visit_suspender = {
     'depresion_mayor': """Depresión mayor, trastorno bipolar, manía o ideación suicida.\n""",
@@ -47,6 +49,7 @@ follow_visit_suspender = {
     'disfuncion_renal': "Disfunción renal.",
     'intolerancia_lactosa': "Intolerancia a la lactosa.\n",
     'suspendio': """Suspendió el tratamiento.\n""",
+    'cirugia_planificada': """SUSPENDER EL USO DE NALTREXONA - BUPROPION AL MENOS 3 DÍAS ANTES DE LA CIRUGÍA PROGRAMADA.\n"""
 }
 
 follow_visit_evaluar = {

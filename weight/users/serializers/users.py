@@ -61,6 +61,7 @@ class UserLoginSerializer(serializers.Serializer):
         return self.context['user'], token.key
 
 
+
 class UserSignUpSerializer(serializers.Serializer):
     """Users signup serializer.
 

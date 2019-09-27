@@ -172,7 +172,8 @@ class FirstVisitComplementSerializer(serializers.ModelSerializer):
         keys_contra_indicado = ['depresion_mayor', 'otros_transtornos', 'hta_no_controlada',
                                 'convulsiones', 'anorexia', 'abuso_alcohol', 'tratamiento_actual',
                                 'alergia_naltrexona', 'embarazo', 'insuficiencia_hepatica',
-                                'glaucoma', 'funcion_renal', 'intolerancia_lactosa']
+                                'glaucoma', 'funcion_renal', 'intolerancia_lactosa',
+                                'cirugia_planificada']
 
         for value in keys_contra_indicado:
             if value not in ['insuficiencia_hepatica', 'funcion_renal'] and data[value]:
@@ -299,7 +300,7 @@ class FollowUpVisitComplementSerializer(serializers.ModelSerializer):
                                 'convulsiones', 'anorexia', 'abuso_alcohol',
                                 'tratamiento_actual', 'embarazo',
                                 'hepatitis_aguda', 'glaucoma', 'disfuncion_renal',
-                                'intolerancia_lactosa', 'suspendio']
+                                'intolerancia_lactosa', 'suspendio', 'cirugia_planificada']
 
         keys_visit_evaluar = ['nauseas', 'constipacion', 'cefalea',
                               'mareos', 'insomnio', 'boca_seca',
