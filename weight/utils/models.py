@@ -143,6 +143,16 @@ class VisitItems(models.Model):
         help_text='item for visit'
     )
 
+    tratamiento_levodopa = models.BooleanField(
+        default=False,
+        help_text='item for visit'
+    )
+
+    cirugia_planificada = models.BooleanField(
+        default=False,
+        help_text='item for visit'
+    )
+
     class Meta:
         """Meta option."""
 
