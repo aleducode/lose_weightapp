@@ -7,8 +7,8 @@ first_visit_contra_indicado = {
     'convulsiones': """Convulsiones o Epilepsia.\n""",
     'anorexia': """Anorexia / Bulimia.\n""",
     'abuso_alcohol': """Abuso de alcohol o abandono
-    abrupto reciente de alcohol.\n""",
-    'tratamiento_actual': """Tratamiento actual con: BENZODIACEPINAS, BARBITURICOS,
+    abrupto reciente de alcohol o de benzodiazepinas.\n""",
+    'tratamiento_actual': """Tratamiento actual con: BARBITURICOS,
                             ANTIEPILEPTICOS, ANTIPSICOTICOS,
                             OPIOIDES O AGONISTAS OPIACEOS,
                             BUPROPION, IMAO, RITONAVIR,
