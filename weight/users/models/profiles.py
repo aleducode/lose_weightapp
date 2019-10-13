@@ -72,6 +72,8 @@ class Profile(WeightModel):
     registration_number = models.CharField(
         'Registration Number',
         max_length=20,
+        null=True,
+        blank=True
     )
 
     class Meta:

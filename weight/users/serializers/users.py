@@ -61,7 +61,6 @@ class UserLoginSerializer(serializers.Serializer):
         return self.context['user'], token.key
 
 
-
 class UserSignUpSerializer(serializers.Serializer):
     """Users signup serializer.
 
@@ -93,7 +92,10 @@ class UserSignUpSerializer(serializers.Serializer):
     registration_type = serializers.SlugField(
         max_length=40
     )
-    registration_number = serializers.CharField(min_length=1)
+    registration_number = serializers.CharField(
+        min_length=1,
+        required=False
+    )
 
     def validate_speciality(self, data):
         """Validate speciality slugname."""
@@ -122,6 +124,12 @@ class UserSignUpSerializer(serializers.Serializer):
         if passwd != passwd_conf:
             raise serializers.ValidationError("Passwords does not match.")
         password_validation.validate_password(passwd)
+        if data['registration_type'].slug_name != 'en_tramite':
+            # Registration_number is required when registration type is not in process.
+            if 'registration_number' not in data:
+                raise serializers.ValidationError({
+                    'registration_number': "This field is required.",
+                })
         return data
 
     def create(self, data):
@@ -140,4 +148,3 @@ class UserSignUpSerializer(serializers.Serializer):
         )
         token, created = Token.objects.get_or_create(user=user)
         return user, token.key
-    
