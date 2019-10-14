@@ -18,6 +18,9 @@ from weight.users.models import (
 # Serializers
 from weight.users.serializers.profiles import ProfileModelSerializer
 
+# Utilities
+from random import randint
+
 
 class UserModelSerializer(serializers.ModelSerializer):
     """User model serializer."""
@@ -73,6 +76,7 @@ class UserSignUpSerializer(serializers.Serializer):
     username = serializers.SlugField(
         max_length=14,
         min_length=4,
+        required=False,
         # unique field respect circles objecs
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
@@ -130,6 +134,8 @@ class UserSignUpSerializer(serializers.Serializer):
                 raise serializers.ValidationError({
                     'registration_number': "This field is required.",
                 })
+        if 'username' not in data:
+            data['username'] = randint(100000, 99999999999)
         return data
 
     def create(self, data):
