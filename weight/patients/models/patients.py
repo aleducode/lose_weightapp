@@ -63,4 +63,10 @@ class Patient(WeightModel):
     def get_short_name(self):
         """Return name."""
         return self.username
+    
+    def get_full_name(self):
+        """Return name."""
+        return '{} {}'.format(
+            self.first_name,
+            self.last_name)
         
