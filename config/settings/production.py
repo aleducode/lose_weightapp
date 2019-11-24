@@ -88,25 +88,20 @@ TEMPLATES[0]["OPTIONS"]["loaders"] = [  # noqa F405
 ]
 
 # EMAIL
+EMAIL_USE_TLS = True
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = 465
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = env(
-    "DJANGO_DEFAULT_FROM_EMAIL", default="weight <noreply@bajadepesoseguro.com>"
-)
-SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
-EMAIL_SUBJECT_PREFIX = env(
-    "DJANGO_EMAIL_SUBJECT_PREFIX", default="[weight]"
+    "DJANGO_DEFAULT_FROM_EMAIL", default="Bajar de peso seguro App <noreply@bajadepesoseguroapp.com>"
 )
 
 # ADMIN
 ADMIN_URL = env("DJANGO_ADMIN_URL")
 
 # Anymail
-INSTALLED_APPS += ["anymail"]  # noqa F405
-EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
-ANYMAIL = {
-    "MAILGUN_API_KEY": env("MAILGUN_API_KEY"),
-    "MAILGUN_SENDER_DOMAIN": env("MAILGUN_DOMAIN"),
-    "MAILGUN_API_URL": env("MAILGUN_API_URL", default="https://api.mailgun.net/v3"),
-}
+EMAIL_BACKEND = "django_smtp_ssl.SSLEmailBackend"
 
 # Gunicorn
 INSTALLED_APPS += ['gunicorn']  # noqa F405

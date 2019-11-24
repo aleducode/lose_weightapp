@@ -28,14 +28,14 @@ CACHES = {
 EMAIL_BACKEND = env(
     'DJANGO_EMAIL_BACKEND', default='django_smtp_ssl.SSLEmailBackend'
 )
-EMAIL_TIMEOUT = 5
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
+EMAIL_HOST = env('EMAIL_HOST')
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'AKIA2H62DLH3NBG6L2G5'
-EMAIL_HOST_PASSWORD = 'BNd8R7sYQvNNo6HSlN8B0ZsnyYHZx+aVN3XytXRHeKri'
-DEFAULT_FROM_EMAIL = 'noreply@jirafapp.com'
-
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = env(
+    "DJANGO_DEFAULT_FROM_EMAIL", default="Bajar de peso seguro App <noreply@bajadepesoseguroapp.com>"
+)
 
 # django-extensions
 

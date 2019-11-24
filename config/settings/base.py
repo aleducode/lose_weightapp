@@ -130,13 +130,6 @@ X_FRAME_OPTIONS = 'DENY'
 EMAIL_BACKEND = env(
     'DJANGO_EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend'
 )
-EMAIL_TIMEOUT = 5
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'AKIA2H62DLH3NBG6L2G5'
-EMAIL_HOST_PASSWORD = 'BNd8R7sYQvNNo6HSlN8B0ZsnyYHZx+aVN3XytXRHeKri'
-DEFAULT_FROM_EMAIL = 'noreply@bajadepesoseguro.ml'
 
 
 # ADMIN

@@ -275,3 +275,4 @@ weight/media/
 .ipython/
 .env
 .envs/.production
+.envs/

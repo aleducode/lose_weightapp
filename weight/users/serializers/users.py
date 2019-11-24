@@ -191,7 +191,7 @@ class ChangePasswordSerializer(serializers.Serializer):
         try:
             send_mail(
                 subject='Bajar de Peso Seguro - Cambio contraseña de acceso',
-                message='Hola {}, Acá podés cambiar de acceso a Bajar de peso seguro App. \n Click acá: {}'.format(
+                message='Hola {}, Acá podés cambiar la contraseña de acceso a Bajar de peso seguro App. \n Click acá: {}'.format(
                     user.first_name,
                     link),
                 from_email=settings.DEFAULT_FROM_EMAIL,
