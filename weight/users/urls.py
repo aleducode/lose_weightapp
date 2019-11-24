@@ -13,5 +13,9 @@ router = DefaultRouter()
 router.register(r'users', user_views.UserViewSet, basename='users')
 
 urlpatterns = [
-    path('', include(router.urls))
-]
+    path('', include(router.urls)),
+    path(
+        route='change-password/',
+        view=user_views.ChangePasswordView.as_view(),
+        name='change-password'
+    )]

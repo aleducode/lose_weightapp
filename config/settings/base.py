@@ -131,11 +131,19 @@ EMAIL_BACKEND = env(
     'DJANGO_EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend'
 )
 EMAIL_TIMEOUT = 5
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'AKIA2H62DLH3NBG6L2G5'
+EMAIL_HOST_PASSWORD = 'BNd8R7sYQvNNo6HSlN8B0ZsnyYHZx+aVN3XytXRHeKri'
+DEFAULT_FROM_EMAIL = 'noreply@bajadepesoseguro.ml'
+
 
 # ADMIN
 ADMIN_URL = 'admin/'
 ADMINS = [('''Ducode-Alejandro Duque Correa''', 'ducode@outlook.com')]
 MANAGERS = ADMINS
+
 
 # LOGGING
 LOGGING = {
@@ -172,3 +180,6 @@ REST_FRAMEWORK = {
 SWAGGER_SETTINGS = {
     'USE_SESSION_AUTH': False,
 }
+
+# Project
+LOSE_WEIGHT_URL = env('LOSE_WEIGHT_URL')

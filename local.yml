@@ -19,6 +19,8 @@ services:
       - ./.envs/.local/.postgres
     ports:
       - "8000:8000"
+      - "587:587"
+      - "25:25"
     command: /start
 
   postgres:

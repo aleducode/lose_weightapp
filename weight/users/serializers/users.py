@@ -2,6 +2,9 @@
 
 # Django
 from django.contrib.auth import password_validation, authenticate
+from django.conf import settings
+from django.core.mail import send_mail
+from django.urls import reverse_lazy
 
 # Django Rest Framework
 from rest_framework import serializers
@@ -19,7 +22,11 @@ from weight.users.models import (
 from weight.users.serializers.profiles import ProfileModelSerializer
 
 # Utilities
+from weight.utils.utilities import generate_auth_token
 from random import randint
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class UserModelSerializer(serializers.ModelSerializer):
@@ -154,3 +161,46 @@ class UserSignUpSerializer(serializers.Serializer):
         )
         token, created = Token.objects.get_or_create(user=user)
         return user, token.key
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    """Reset code Serializer."""
+
+    email = serializers.EmailField()
+
+    def validate_email(self, data):
+        """Check email credentials."""
+        email = User.objects.filter(email=data)
+        if not email:
+            raise serializers.ValidationError('Este correo electrónico no es válido.')
+        return data
+
+    def create(self, data):
+        """Handle create method to send reset email."""
+        # Send email
+        user = User.objects.get(email=data['email'])
+
+        # Token generation
+        token = generate_auth_token(user, 'reset-password')
+        # Decrypt data
+        link = '{}{}?token={}'.format(
+            settings.LOSE_WEIGHT_URL,
+            reverse_lazy('users:change-password'),
+            token
+        )
+        try:
+            send_mail(
+                subject='Bajar de Peso Seguro - Cambio contraseña de acceso',
+                message='Hola {}, Acá podés cambiar de acceso a Bajar de peso seguro App. \n Click acá: {}'.format(
+                    user.first_name,
+                    link),
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[user.email],
+                fail_silently=False,
+            )
+        except Exception as e:
+            logger.error("Error sent email: %s", e)
+
+        return user
+
+

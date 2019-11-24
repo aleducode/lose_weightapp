@@ -1,0 +1,163 @@
+/* These styles are generated from project.scss. */
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  position: relative;
+  margin: 0;
+  min-height: 100%;
+  font-family: 'Open Sans', sans-serif !important;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.first-container {
+  padding-bottom: 18em;
+}
+
+.alert-debug {
+  color: black;
+  background-color: white;
+  border-color: #d6e9c6;
+}
+
+.alert-error {
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+}
+
+.display-5 {
+  font-size: 1.5rem;
+  font-weight: 300;
+  line-height: 1.2;
+}
+
+.display-6 {
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.2;
+}
+
+.text-banner .display-4 {
+  font-size: 3.2rem;
+}
+
+.text-banner {
+  margin-bottom: 35px;
+}
+
+@media only screen and (max-width:760px) {
+  .text-banner {
+    margin-top: -20px;
+  }
+}
+
+.info-registro {
+  margin-bottom: 15px;
+}
+
+.btn-3-card {
+  flex: 1 1 auto;
+  text-align: center;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  /* text-shadow: 0px 0px 10px rgba(0,0,0,0.2);*/
+}
+
+.btn-3-card {
+  background-image: linear-gradient(to right, #42ac68 0%, #5ab5e2 51%, #42ac68 100%);
+}
+
+.btn-3-card:hover {
+  background-position: right center;
+  color: #fff !important;
+  /* change the direction of the change here */
+}
+
+.btn-3 {
+  background-image: linear-gradient(to right, #42ac68 0%, #5ab5e2 51%, #42ac68 100%);
+}
+
+.btn-3:hover {
+  background-position: right center;
+  color: #fff !important;
+  /* change the direction of the change here */
+}
+
+.btn-3 {
+  flex: 1 1 auto;
+  margin: 10px;
+  text-align: center;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  /* text-shadow: 0px 0px 10px rgba(0,0,0,0.2);*/
+  border-radius: 5px;
+}
+
+@media only screen and (max-width: 780px) {
+  .social-media {
+    margin-left: 5px !important;
+  }
+}
+
+.social-media {
+  margin-left: 25px;
+}
+
+footer a {
+  text-decoration: none;
+  color: inherit;
+}
+
+footer a:hover {
+  color: inherit;
+}
+
+.back-button {
+  margin-top: 20px;
+}
+
+@media only screen and (max-width: 760px) {
+  .pd-top-5 {
+    padding-top: 5em;
+  }
+}
+
+
+/* Register */
+.optional-input {
+  display: inline-flex;
+}
+
+.full-center{
+  margin: auto;
+  width: 40%;
+  padding: 10px; 
+}
+
+.error-http{
+  text-align: center;
+  display: table;
+  margin: 0 auto;
+}
+
+.img-error{
+  width: 25%;
+}
+
+.error-description{
+  margin-bottom: 0em !important;
+}

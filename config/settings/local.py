@@ -13,7 +13,8 @@ SECRET_KEY = env(
 ALLOWED_HOSTS = [
     "localhost",
     "0.0.0.0",
-    "127.0.0.1"]
+    "127.0.0.1",
+    'idargentina.com']
 
 # CACHES
 CACHES = {
@@ -25,14 +26,16 @@ CACHES = {
 
 # EMAIL
 EMAIL_BACKEND = env(
-    "DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend"
+    'DJANGO_EMAIL_BACKEND', default='django_smtp_ssl.SSLEmailBackend'
 )
-EMAIL_HOST = "localhost"
-EMAIL_PORT = 1025
-DEBUG_TOOLBAR_CONFIG = {
-    "DISABLE_PANELS": ["debug_toolbar.panels.redirects.RedirectsPanel"],
-    "SHOW_TEMPLATE_CONTEXT": True,
-}
+EMAIL_TIMEOUT = 5
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'AKIA2H62DLH3NBG6L2G5'
+EMAIL_HOST_PASSWORD = 'BNd8R7sYQvNNo6HSlN8B0ZsnyYHZx+aVN3XytXRHeKri'
+DEFAULT_FROM_EMAIL = 'noreply@jirafapp.com'
+
 
 # django-extensions
 
