@@ -1,5 +1,0 @@
-# General
-# ------------------------------------------------------------------------------
-USE_DOCKER=yes
-IPYTHONDIR=/app/.ipython
-LOSE_WEIGHT_URL=http://idargentina.com:8000
