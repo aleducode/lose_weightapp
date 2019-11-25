@@ -169,5 +169,5 @@ class ChangePasswordView(FormView):
     def form_valid(self, form):
         """Validate form."""
         form.save()
-        messages.success(self.request, 'Contraseña acutalizada.')
+        messages.success(self.request, 'Contraseña Actualizada.')
         return render(self.request, self.template_name)
