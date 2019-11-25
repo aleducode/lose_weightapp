@@ -54,7 +54,7 @@ class UserLoginSerializer(serializers.Serializer):
     """
 
     email = serializers.EmailField()
-    password = serializers.CharField(min_length=8)
+    password = serializers.CharField(min_length=6)
 
     def validate(self, data):
         """Check credentials."""
