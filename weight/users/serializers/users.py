@@ -170,6 +170,7 @@ class ChangePasswordSerializer(serializers.Serializer):
 
     def validate_email(self, data):
         """Check email credentials."""
+        data = data.lower()
         email = User.objects.filter(email=data)
         if not email:
             raise serializers.ValidationError('Este correo electrónico no es válido.')
