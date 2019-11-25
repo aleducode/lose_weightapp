@@ -11,7 +11,7 @@ import jwt
 
 def generate_auth_token(user, token_usage):
     """Create JWT token that the user can use to login."""
-    expiration_date = timezone.localtime() + timedelta(minutes=5)
+    expiration_date = timezone.localtime() + timedelta(hours=2)
     payload = {
         'user': user.username,
         # UTC format
