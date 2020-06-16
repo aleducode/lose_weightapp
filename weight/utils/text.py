@@ -2,7 +2,7 @@
 
 first_visit_contra_indicado = {
     'depresion_mayor': """trastorno bipolar, manía o ideación suicida.\n""",
-    'otros_transtornos': """Otros trastornos psiquiátricos{incluidos en la cesación tabáquica}.\n""",
+    #'otros_transtornos': """Otros trastornos psiquiátricos{incluidos en la cesación tabáquica}.\n""",
     'hta_no_controlada': """HTA no controlada.\n""",
     'convulsiones': """Convulsiones o Epilepsia.\n""",
     'anorexia': """Anorexia / Bulimia.\n""",
@@ -28,7 +28,7 @@ first_visit_contra_indicado = {
 
 follow_visit_suspender = {
     'depresion_mayor': """trastorno bipolar, manía o ideación suicida.\n""",
-    'otros_transtornos': """Otros trastornos psiquiátricos (incluidos en la cesación tabáquica).\n""",
+    #'otros_transtornos': """Otros trastornos psiquiátricos (incluidos en la cesación tabáquica).\n""",
     'hta_no_controlada': """HTA no controlada.\n""",
     'convulsiones': """Convulsiones o Epilepsia.\n""",
     'anorexia': """Anorexia / Bulimia.\n""",

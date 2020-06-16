@@ -169,7 +169,7 @@ class FirstVisitComplementSerializer(serializers.ModelSerializer):
         patient = self.context['patient']
         concept = None
         result = result_header = reason_contra_indicado = ''
-        keys_contra_indicado = ['depresion_mayor', 'otros_transtornos', 'hta_no_controlada',
+        keys_contra_indicado = ['depresion_mayor', 'hta_no_controlada',
                                 'convulsiones', 'anorexia', 'abuso_alcohol', 'tratamiento_actual',
                                 'alergia_naltrexona', 'embarazo', 'insuficiencia_hepatica',
                                 'glaucoma', 'funcion_renal', 'intolerancia_lactosa',
@@ -296,7 +296,7 @@ class FollowUpVisitComplementSerializer(serializers.ModelSerializer):
         concept = None
         result = ''
         result_header = reason_suspender = reason_evaluar = ''
-        keys_visit_suspender = ['depresion_mayor', 'otros_transtornos', 'hta_no_controlada',
+        keys_visit_suspender = ['depresion_mayor', 'hta_no_controlada',
                                 'convulsiones', 'anorexia', 'abuso_alcohol',
                                 'tratamiento_actual', 'embarazo',
                                 'hepatitis_aguda', 'glaucoma', 'disfuncion_renal',

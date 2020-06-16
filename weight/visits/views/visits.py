@@ -89,6 +89,7 @@ class VisitViewSet(mixins.ListModelMixin,
         data = VisitModelSerializer(visit).data
         return Response(data, status=status.HTTP_201_CREATED)
 
+
     @action(detail=False, methods=['post'])
     def complement_follow_up(self, request, *args, **kwargs):
         """Anaylze patient data to generate medical concept for follow up visit."""
