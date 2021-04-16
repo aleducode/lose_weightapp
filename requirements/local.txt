@@ -16,7 +16,7 @@ pylint-django==2.0.11
 
 # Django
 factory-boy==2.12.0
-django-debug-toolbar==2.0
+django-debug-toolbar==2.2.1
 django-extensions==2.2.1
 django-coverage-plugin==1.6.0
 pytest-django==3.5.1
